@@ -2,6 +2,8 @@
 Este es una configuracion basica para un REST Server API
 para descargar y montar en cualquier momento.
 
+Ejecutar ```npm install``` para reconstruir los modulos
+
 ## Paquetes utilizados
 
 1. Express : Servidor
