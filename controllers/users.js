@@ -23,9 +23,6 @@ const usersGet = (req, res = response) => {
 }
 
 const usersPost = (req, res = response) => {
-
-
-
     //esta es lo que me envia 
     //del paramatro en el request
     //cuando en el body es de tipo JSON
