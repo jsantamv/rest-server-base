@@ -1,6 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
+require('colors')
+
+const { dbConnection } = require('../database/config')
 
 
 class Server {
@@ -9,6 +12,9 @@ class Server {
         this.port = process.env.PORT
         this.usersPath = '/api/users'
 
+        //conectar a la db
+        this.databaseCNN()
+
         //Middlewares 
         this.middleware()
 
@@ -16,6 +22,9 @@ class Server {
         this.routes();
     }
 
+    async databaseCNN() {
+        await dbConnection()
+    }
 
     middleware() {
         //CORS        
@@ -33,11 +42,9 @@ class Server {
         this.app.use(this.usersPath, require('../routes/user.routes'))
     }
 
-    lisetn() {
+    listen() {
         this.app.listen(this.port, () => {
-            console.log(`Server en => http://localhost:${this.port}`)
-            console.log(`Server en => http://localhost:${this.port}/api`)
-
+            console.log(`Server Listen => http://localhost:${this.port}`.bgBlue)
         })
     }
 }

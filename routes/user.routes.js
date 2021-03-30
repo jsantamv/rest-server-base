@@ -3,7 +3,7 @@ const { usersGet,
     usersDelete,
     usersPatch,
     usersPut,
-    usersPost } = require('../controllers/users')
+    usersPost } = require('../controllers/users.controller')
 
 const router = Router()
 
