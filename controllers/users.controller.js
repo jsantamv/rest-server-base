@@ -8,8 +8,8 @@ const usersGet = async (req, res = response) => {
     //Este es cuando enviamos los parametros
     //Por medio de un <query>
     //const { q, nombre = 'No name', apiKey, page = 1, limit = 10 } = req.query
-    const querie = { estado: true }
-    const { limite = 5, desde = 0 } = req.query
+    const { limite = 5, desde = 0, estado = true } = req.query
+    const querie = { estado }
 
     /** Codigo ejecutado en dos pasos */
     // const usuarios = await Usuario.find(querie)
@@ -34,8 +34,6 @@ const usersGet = async (req, res = response) => {
 }
 
 
-
-//#region Other Methods
 
 
 /**
@@ -67,7 +65,8 @@ const usersPut = async (req, res = response) => {
  */
 const usersPost = async (req, res = response) => {
     try {
-        //<resto>, es para enviar los demas campos en caso de que se requiera
+        //<resto>, es para enviar los demas campos a actualizar
+        // en caso de que se requiera
         //se hace de esta forma si queremos desestructurar los campos 
         //que son obligatorios
         const { nombre, correo, password, rol, ...resto } = req.body;
@@ -93,13 +92,22 @@ const usersPatch = (req, res = response) => {
     })
 }
 
-const usersDelete = (req, res = response) => {
+const usersDelete = async (req, res = response) => {
+
+    const { id } = req.params
+
+    //Borrado Fisico
+    //const usuario = await Usuario.findByIdAndDelete(id)
+
+    //Borrado Logico
+    const usuario = await Usuario.findByIdAndUpdate(id, { estado: false })
+
     res.json({
-        msg: "usersDelete API - Controlador"
+        msg: "Usuario eliminado",
+        usuario
     })
 }
 
-//#endregion
 
 module.exports = {
     usersGet,

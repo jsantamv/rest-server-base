@@ -15,8 +15,8 @@ const router = Router()
 router.get('/', usersGet)
 
 //esta es la forma de enviar
-router.put('/:id',[
-    check('id','No es un Id valido').isMongoId(),
+router.put('/:id', [
+    check('id', 'No es un Id valido').isMongoId(),
     check('id').custom(userExistById),
     check('rol').custom(validRole),
     validarCampos
@@ -32,7 +32,11 @@ router.post('/', [
     validarCampos
 ], usersPost)
 
-router.delete('/', usersDelete)
+router.delete('/:id', [
+    check('id', 'No es un Id valido').isMongoId(),
+    check('id').custom(userExistById),
+    validarCampos
+], usersDelete)
 
 router.patch('/', usersPatch)
 
