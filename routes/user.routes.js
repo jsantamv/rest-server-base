@@ -18,6 +18,7 @@ router.get('/', usersGet)
 router.put('/:id',[
     check('id','No es un Id valido').isMongoId(),
     check('id').custom(userExistById),
+    check('rol').custom(validRole),
     validarCampos
 ], usersPut)
 

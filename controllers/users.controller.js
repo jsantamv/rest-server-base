@@ -3,50 +3,63 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/users');
 
 
+const usersGet = async (req, res = response) => {
+
+    //Este es cuando enviamos los parametros
+    //Por medio de un <query>
+    //const { q, nombre = 'No name', apiKey, page = 1, limit = 10 } = req.query
+    const querie = { estado: true }
+    const { limite = 5, desde = 0 } = req.query
+
+    /** Codigo ejecutado en dos pasos */
+    // const usuarios = await Usuario.find(querie)
+    //     .skip(Number(desde))
+    //     .limit(Number(limite))
+    // const total = await Usuario.countDocuments(querie)
+
+    //Hacemos una promesa para optimizar la ejecucion en base de datos
+    //se ejecuta simultanamente
+    //Realizamos una desestructuracion de ARREGLOS
+    const [total, usuarios] = await Promise.all([
+        Usuario.countDocuments(querie),
+        Usuario.find(querie)
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ])
+
+    res.json({
+        total,
+        usuarios
+    })
+}
 
 
+
+//#region Other Methods
+
+
+/**
+ * Actualizar un usuario por Id
+ * @param {*} req 
+ * @param {*} res 
+ */
 const usersPut = async (req, res = response) => {
 
     //id a actualizar
     const { id } = req.params
     //desestructuramos para exlcuir lo que no quiero utilizar
-    const {_id, password, google, correo, ...user } = req.body;
+    const { _id, password, google, correo, ...user } = req.body;
 
+    //Encryptar el password
     if (password) {
-        //Encryptar el password
         const salt = bcrypt.genSaltSync()
         user.password = bcrypt.hashSync(password, salt)
     }
-    
+
+    //Guardar
     const usuario = await Usuario.findByIdAndUpdate(id, user)
 
-    res.json({
-        msg: `Usuario: ${user.nombre} actualizado correctamente`,
-        usuario
-    })
-}
-
-
-//#region Other Methods
-const usersGet = (req, res = response) => {
-
-    //Este es cuando enviamos los parametros
-    //Por medio de un querie
-    const { q,
-        nombre = 'No name',
-        apiKey,
-        page = 1,
-        limit = 10
-    } = req.query
-
-    res.json({
-        msg: "get API - Controlador",
-        q,
-        nombre,
-        apiKey,
-        page,
-        limit
-    })
+    res.json(usuario)
 }
 
 /**Almacenando 
@@ -68,10 +81,7 @@ const usersPost = async (req, res = response) => {
         await user.save()
 
         //esto es lo que devuelvo
-        res.json({
-            msg: "Datos almacenados",
-            user
-        })
+        res.json(user)
     } catch (err) {
         console.log(err)
     }

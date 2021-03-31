@@ -26,6 +26,10 @@ const emailExist = async (correo = '') => {
 }
 
 
+/**
+ * Validar si el usuario existe
+ * @param {id} id del usuario
+ */
 const userExistById = async (id = '') => {
     const userExist = await Usuario.findById(id)
     if (!userExist) {
