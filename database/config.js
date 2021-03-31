@@ -12,7 +12,7 @@ const dbConnection = async () => {
             useFindAndModify: false //Utilizar ciertas funciones 
         });
 
-        console.log('ServerDB Status => OnLine'.bgBlue)
+        console.log('ServerDB Status => OnLine'.bgGreen)
 
     } catch (err) {
         console.log(err)

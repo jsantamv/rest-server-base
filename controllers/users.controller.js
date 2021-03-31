@@ -1,6 +1,33 @@
 const { response } = require('express')
+const bcrypt = require('bcryptjs');
+const Usuario = require('../models/users');
 
 
+
+
+const usersPut = async (req, res = response) => {
+
+    //id a actualizar
+    const { id } = req.params
+    //desestructuramos para exlcuir lo que no quiero utilizar
+    const {_id, password, google, correo, ...user } = req.body;
+
+    if (password) {
+        //Encryptar el password
+        const salt = bcrypt.genSaltSync()
+        user.password = bcrypt.hashSync(password, salt)
+    }
+    
+    const usuario = await Usuario.findByIdAndUpdate(id, user)
+
+    res.json({
+        msg: `Usuario: ${user.nombre} actualizado correctamente`,
+        usuario
+    })
+}
+
+
+//#region Other Methods
 const usersGet = (req, res = response) => {
 
     //Este es cuando enviamos los parametros
@@ -8,7 +35,7 @@ const usersGet = (req, res = response) => {
     const { q,
         nombre = 'No name',
         apiKey,
-        page =1,
+        page = 1,
         limit = 10
     } = req.query
 
@@ -22,32 +49,32 @@ const usersGet = (req, res = response) => {
     })
 }
 
-const usersPost = (req, res = response) => {
-    //esta es lo que me envia 
-    //del paramatro en el request
-    //cuando en el body es de tipo JSON
-    const { nombre, edad } = req.body;
+/**Almacenando 
+ * la informacion a base de datos
+ */
+const usersPost = async (req, res = response) => {
+    try {
+        //<resto>, es para enviar los demas campos en caso de que se requiera
+        //se hace de esta forma si queremos desestructurar los campos 
+        //que son obligatorios
+        const { nombre, correo, password, rol, ...resto } = req.body;
+        const user = new Usuario({ nombre, correo, password, rol })
 
-    //esto es lo que devuelvo
-    res.json({
-        msg: "usersPost API - Controlador",
-        nombre,
-        edad
-    })
-}
+        //Encryptar el password
+        const salt = bcrypt.genSaltSync()
+        user.password = bcrypt.hashSync(password, salt)
 
-const usersPut = (req, res = response) => {
+        //Guardar los datos        
+        await user.save()
 
-    const id = req.params.id
-
-    const { nombre, edad } = req.body;
-
-    res.json({
-        msg: "usersPut API - Controlador",
-        id,
-        nombre,
-        edad
-    })
+        //esto es lo que devuelvo
+        res.json({
+            msg: "Datos almacenados",
+            user
+        })
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const usersPatch = (req, res = response) => {
@@ -62,6 +89,7 @@ const usersDelete = (req, res = response) => {
     })
 }
 
+//#endregion
 
 module.exports = {
     usersGet,
