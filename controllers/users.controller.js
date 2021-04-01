@@ -96,16 +96,10 @@ const usersDelete = async (req, res = response) => {
 
     const { id } = req.params
 
-    //Borrado Fisico
-    //const usuario = await Usuario.findByIdAndDelete(id)
-
     //Borrado Logico
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: false })
 
-    res.json({
-        msg: "Usuario eliminado",
-        usuario
-    })
+    res.json({ usuario })
 }
 
 

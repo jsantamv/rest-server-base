@@ -14,5 +14,6 @@ Ejecutar ```npm install``` para reconstruir los modulos
 ## Paquete para instalar la password
 1. bcryptjs: https://www.npmjs.com/package/bcryptjs ```npm i bcryptjs```
 2. Validaciones de expreciones regulares ```npm install express-validator``` https://express-validator.github.io/docs/
+3. JWT ```npm install jsonwebtoken``` doc https://www.npmjs.com/package/jsonwebtoken
 
 

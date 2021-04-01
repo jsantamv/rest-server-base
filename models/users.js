@@ -35,7 +35,14 @@ const UsuarioSchema = Schema({
 
 //Sobreescribimos el metodo de toJSON
 UsuarioSchema.methods.toJSON = function () {
-    const { __v, password, ..._user } = this.toObject()
+    const { __v,
+        password,
+        _id,
+        ..._user
+    } = this.toObject()
+
+    //transformar _id de db mongo en uid
+    _user.uid = _id
     return _user
 }
 
