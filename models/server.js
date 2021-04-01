@@ -3,6 +3,7 @@ const cors = require('cors')
 require('dotenv').config()
 require('colors')
 
+//libreria para la conecion con MongoDB
 const { dbConnection } = require('../database/config')
 
 
@@ -10,6 +11,8 @@ class Server {
     constructor() {
         this.app = express()
         this.port = process.env.PORT
+        
+        //defino mis rutas
         this.usersPath = '/api/users'
         this.authPath = '/api/auth'
 
@@ -23,6 +26,7 @@ class Server {
         this.routes();
     }
 
+    //Realizo la conexion con MongoDb cuando levanto el app
     async databaseCNN() {
         await dbConnection()
     }
