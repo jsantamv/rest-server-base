@@ -11,6 +11,7 @@ class Server {
         this.app = express()
         this.port = process.env.PORT
         this.usersPath = '/api/users'
+        this.authPath = '/api/auth'
 
         //conectar a la db
         this.databaseCNN()
@@ -33,12 +34,13 @@ class Server {
         //Lectura y Parseo del Body
         //lo que viene formatea en JSON
         this.app.use(express.json())
-
+        
         // directorio publico
         this.app.use(express.static('public'))
     }
 
     routes() {
+        this.app.use(this.authPath, require('../routes/auth.routes'))
         this.app.use(this.usersPath, require('../routes/user.routes'))
     }
 
