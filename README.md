@@ -17,3 +17,7 @@ Ejecutar ```npm install``` para reconstruir los modulos
 3. JWT ```npm install jsonwebtoken``` doc https://www.npmjs.com/package/jsonwebtoken
 
 
+## Leer Logs en HEROKU por linea de comandos
+```heroku logs -n 100 --tail```
+donde 100 es la cantidad a observar de los ulitmos logs
+y tail, para mantener escuchando los logs
